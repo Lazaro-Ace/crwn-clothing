@@ -8,6 +8,8 @@ import {
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase.utils";
 
+
+
 import './sign-up-form.styles.scss'
 
 const defaulFormFields = {
@@ -38,9 +40,9 @@ const SignUpForm = () => {
     try {
       const { user } = await createAuthUserWithEmailAndPassword(
         email,
-        password
+        password,
+        
       );
-
       await createUserDocumentFromAuth(user, { displayName });
       resetFields()
     } catch (error) {
