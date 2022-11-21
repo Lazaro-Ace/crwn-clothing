@@ -1,6 +1,6 @@
-import { FormInputLabel, Input, Group } from "./form-input.styles";
+import { FormInputLabel, Input, Group } from './form-input.styles';
 
-const FromInput = ({ label, ...otherProps }) => {
+const FormInput = ({ label, ...otherProps }) => {
   return (
     <Group>
       <Input {...otherProps} />
@@ -13,4 +13,4 @@ const FromInput = ({ label, ...otherProps }) => {
   );
 };
 
-export default FromInput;
+export default FormInput;

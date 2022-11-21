@@ -1,112 +1,104 @@
-import { useState } from "react";
+import { useState } from 'react';
 
-import FromInput from "../form-input/form-input.component";
-import Button from "../button/button.component";
+import FormInput from '../form-input/form-input.component';
+import Button from '../button/button.component';
 
 import {
   createAuthUserWithEmailAndPassword,
   createUserDocumentFromAuth,
-} from "../../utils/firebase/firebase.utils";
+} from '../../utils/firebase/firebase.utils';
 
+import { SignUpContainer } from './sign-up-form.styles';
 
-
-import {SignUp, H2} from './sign-up-form.styles.jsx'
-
-const defaulFormFields = {
-  displayName: "",
-  email: "",
-  password: "",
-  confirmPassword: "",
+const defaultFormFields = {
+  displayName: '',
+  email: '',
+  password: '',
+  confirmPassword: '',
 };
 
 const SignUpForm = () => {
-  const [formFields, setFormFields] = useState(defaulFormFields);
+  const [formFields, setFormFields] = useState(defaultFormFields);
   const { displayName, email, password, confirmPassword } = formFields;
 
-  //console.log(formFields)
+  const resetFormFields = () => {
+    setFormFields(defaultFormFields);
+  };
 
-  const resetFields = () => {
-    setFormFields(defaulFormFields)
-  }
-
-  const handelSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match");
+      alert('passwords do not match');
       return;
     }
 
     try {
       const { user } = await createAuthUserWithEmailAndPassword(
         email,
-        password,
-        
+        password
       );
+
       await createUserDocumentFromAuth(user, { displayName });
-      resetFields()
+      resetFormFields();
     } catch (error) {
-      console.log(error);
-      if(error.code === 'auth/email-already-in-use') {
-        alert('Cannot create user, email already in use')
-      }
-      else{
-        console.log(error)
+      if (error.code === 'auth/email-already-in-use') {
+        alert('Cannot create user, email already in use');
+      } else {
+        console.log('user creation encountered an error', error);
       }
     }
   };
 
-  const handelChange = (event) => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
 
     setFormFields({ ...formFields, [name]: value });
   };
 
   return (
-    <SignUp>
-    <H2>Don't have an account?</H2>
+    <SignUpContainer>
+      <h2>Don't have an account?</h2>
       <span>Sign up with your email and password</span>
-      <form onSubmit={handelSubmit}>
-        <FromInput
-          label= "Display Name"
-          type="text"
+      <form onSubmit={handleSubmit}>
+        <FormInput
+          label='Display Name'
+          type='text'
           required
-          onChange={handelChange}
-          name="displayName"
+          onChange={handleChange}
+          name='displayName'
           value={displayName}
         />
 
-        <FromInput
-          label= "Email"
-          type="email"
+        <FormInput
+          label='Email'
+          type='email'
           required
-          onChange={handelChange}
-          name="email"
+          onChange={handleChange}
+          name='email'
           value={email}
         />
 
-
-        <FromInput
-        label= "Password"
-          type="password"
+        <FormInput
+          label='Password'
+          type='password'
           required
-          onChange={handelChange}
-          name="password"
+          onChange={handleChange}
+          name='password'
           value={password}
         />
 
-        <FromInput
-        label= "Confirm Password"
-          type="password"
+        <FormInput
+          label='Confirm Password'
+          type='password'
           required
-          onChange={handelChange}
-          name="confirmPassword"
+          onChange={handleChange}
+          name='confirmPassword'
           value={confirmPassword}
         />
-
-        <Button type="submit">Sign Up</Button>
+        <Button type='submit'>Sign Up</Button>
       </form>
-    </SignUp>
+    </SignUpContainer>
   );
 };
 
